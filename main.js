@@ -1,4 +1,8 @@
+const arenas = document.querySelector('.arenas');
+const button = document.querySelector('.button');
+
 const player1 = {
+    player: 1,
     name: 'Scorpion',
     hp: 50,
     img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
@@ -9,6 +13,7 @@ const player1 = {
 };
 
 const player2 = {
+    player: 2,
     name: 'SubZero',
     hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/subzero.gif',
@@ -18,28 +23,26 @@ const player2 = {
     }
 };
 
-function createPlayer(playerNamber, PlayerName, hp) {
+function createElement(tag, className) {
+    const OurTag = document.createElement(tag);
+    OurTag.classList.add(className);
+    return OurTag;
+}
 
-    const player = document.createElement('div');
-    player.classList.add('player1');
+function createPlayer(playerObj) {
 
-    const progressBar = document.createElement('div');
-    progressBar.classList.add('progressbar');
+    const player = createElement('div', 'player' + playerObj.player);
+    const progressBar = createElement('div', 'progressbar');
+    const character = createElement('div', 'character');
 
-    const character = document.createElement('div');
-    character.classList.add('character');
+    const img = createElement('img');
+    img.src = playerObj.img;
 
-    const img = document.createElement('img');
-    // img.src = img;
-    img.src = 'http://reactmarathon-api.herokuapp.com/assets/subzero.gif';
+    const life = createElement('div', 'life');
+    life.style.width = playerObj.hp + '%';
 
-    const life = document.createElement('div');
-    life.classList.add('life');
-    life.style.width = hp + '%';
-
-    const name = document.createElement('div');
-    name.classList.add('name');
-    name.innerText = PlayerName;
+    const name = createElement('div', 'name');
+    name.innerText = playerObj.name;
 
     progressBar.appendChild(life);
     progressBar.appendChild(name);
@@ -49,12 +52,20 @@ function createPlayer(playerNamber, PlayerName, hp) {
     player.appendChild(progressBar);
     player.appendChild(character);
 
-    const arenas = document.querySelector('.arenas');
-    arenas.appendChild(player);
-    // arenas.appendChild(player2);
-
-
+    return player;
 }
 
-createPlayer(player1, 'Scoppion', 50);
-createPlayer(player2, 'SubZero', 100);
+function changeHP(player) {
+    const playerLife = document.querySelector('.player' + player.player + '.life');
+    player.hp -= 20;
+    playerLife.style.width = player.hp + '%';
+}
+
+button.addEventListener('click', function () {
+    console.log('kickasss!!!');
+    changeHP(player1);
+    changeHP(player2);
+})
+
+arenas.appendChild(createPlayer(player1));
+arenas.appendChild(createPlayer(player2));
