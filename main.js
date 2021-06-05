@@ -1,24 +1,24 @@
-const playerOne = {
-    name: 'scorpion',
-    hp: 100,
+const player1 = {
+    name: 'Scorpion',
+    hp: 50,
     img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
     weapon: ['knife', 'fire', 'gun'],
-    attack: function f() {
-        console.log(playerOne.name + 'fight...');
+    attack: function () {
+        console.log(Scorpion.name + 'fight...');
     }
 };
 
-const playerTwo = {
-    name: 'subZero',
+const player2 = {
+    name: 'SubZero',
     hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/subzero.gif',
     weapon: ['knife', 'ice', 'gun'],
-    attack: function f() {
-        console.log(plaerTwo.name + '  ' + ' fight...');
+    attack: function () {
+        console.log(SubZero.name + '  ' + ' fight...');
     }
 };
 
-function createPlayer() {
+function createPlayer(playerNamber, PlayerName, hp) {
 
     const player = document.createElement('div');
     player.classList.add('player1');
@@ -30,15 +30,16 @@ function createPlayer() {
     character.classList.add('character');
 
     const img = document.createElement('img');
-    img.src = playerOne.img;
+    // img.src = img;
+    img.src = 'http://reactmarathon-api.herokuapp.com/assets/subzero.gif';
 
     const life = document.createElement('div');
     life.classList.add('life');
-    life.style.width = '100%';
+    life.style.width = hp + '%';
 
     const name = document.createElement('div');
     name.classList.add('name');
-    name.innerText = 'SCORPION';
+    name.innerText = PlayerName;
 
     progressBar.appendChild(life);
     progressBar.appendChild(name);
@@ -48,15 +49,12 @@ function createPlayer() {
     player.appendChild(progressBar);
     player.appendChild(character);
 
-    const arenas = document.createElement('div');
-    arenas.classList.add('arenas');
+    const arenas = document.querySelector('.arenas');
+    arenas.appendChild(player);
+    // arenas.appendChild(player2);
 
-    // arenas.appendChild(playerOne);
-    // arenas.appendChild(playerTwo);
 
-    const root = document.querySelector('.root');
-    root.appendChild(player);
 }
 
-createPlayer('player2', 50);
-createPlayer();
+createPlayer(player1, 'Scoppion', 50);
+createPlayer(player2, 'SubZero', 100);
