@@ -1,10 +1,10 @@
 const arenas = document.querySelector('.arenas');
 const button = document.querySelector('.button');
 
-const player1 = {
+const scorpion = {
     player: 1,
-    name: 'Scorpion',
-    hp: 50,
+    name: 'scorpion',
+    hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
     weapon: ['knife', 'fire', 'gun'],
     attack: function () {
@@ -12,9 +12,9 @@ const player1 = {
     }
 };
 
-const player2 = {
+const subZero = {
     player: 2,
-    name: 'SubZero',
+    name: 'subZero',
     hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/subzero.gif',
     weapon: ['knife', 'ice', 'gun'],
@@ -56,16 +56,34 @@ function createPlayer(playerObj) {
 }
 
 function changeHP(player) {
-    const playerLife = document.querySelector('.player' + player.player + '.life');
-    player.hp -= 20;
+    const playerLife = document.querySelector('.player' + player.player + ' .life');
+    player.hp -= randomDamage();
     playerLife.style.width = player.hp + '%';
+
+    if (player.hp < 0) {
+        arenas.appendChild(playerLose(player.name));
+        button.disabled = true;
+    }
+}
+
+function playerLose(name) {
+    const loseTitle = createElement('div', 'loseTitle');
+    loseTitle.innerText = name + ' lose';
+
+    return loseTitle;
+}
+
+function randomDamage() {
+    const damage = Math.ceil(Math.random() * 20);
+    console.log(damage);
+    return damage;
 }
 
 button.addEventListener('click', function () {
     console.log('kickasss!!!');
-    changeHP(player1);
-    changeHP(player2);
-})
+    changeHP(scorpion);
+    changeHP(subZero);
+});
 
-arenas.appendChild(createPlayer(player1));
-arenas.appendChild(createPlayer(player2));
+arenas.appendChild(createPlayer(scorpion));
+arenas.appendChild(createPlayer(subZero));
