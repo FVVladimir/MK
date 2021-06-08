@@ -8,8 +8,10 @@ const scorpion = {
     img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
     weapon: ['knife', 'fire', 'gun'],
     attack: function () {
-        console.log(Scorpion.name + 'fight...');
-    }
+        console.log(this.name + 'fight...');
+    },
+    deductHP: deductHP,
+    drowHP: drowHP,
 };
 
 const subZero = {
@@ -19,8 +21,10 @@ const subZero = {
     img: 'http://reactmarathon-api.herokuapp.com/assets/subzero.gif',
     weapon: ['knife', 'ice', 'gun'],
     attack: function () {
-        console.log(SubZero.name + '  ' + ' fight...');
-    }
+        console.log(this.name + '  ' + ' fight...');
+    },
+    deductHP: deductHP,
+    drowHP: drowHP,
 };
 
 function createElement(tag, className) {
@@ -56,33 +60,78 @@ function createPlayer(playerObj) {
 }
 
 function changeHP(player) {
-    const playerLife = document.querySelector('.player' + player.player + ' .life');
-    player.hp -= randomDamage();
-    playerLife.style.width = player.hp + '%';
+    // const playerLife = document.querySelector('.player' + player.player + ' .life');
+    // player.hp -= randomDamage(20);
 
     if (player.hp < 0) {
-        arenas.appendChild(playerLose(player.name));
-        button.disabled = true;
+        player.hp = 0;
     }
-}
 
-function playerLose(name) {
+    // playerLife.style.width = player.hp + '%';
+};
+
+function playerWins(name) {
     const loseTitle = createElement('div', 'loseTitle');
-    loseTitle.innerText = name + ' lose';
-
+    if (name) {
+        loseTitle.innerText = name + ' wins';
+    } else {
+        loseTitle.innerText = 'draw';
+    }
     return loseTitle;
-}
+};
 
-function randomDamage() {
-    const damage = Math.ceil(Math.random() * 20);
-    console.log(damage);
+function randomDamage(nam) {
+    const damage = Math.ceil(Math.random() * nam);
+    // console.log(damage);
     return damage;
+};
+
+// function elHP(playerObj) {
+//     const playerNamber = document.querySelector('.player' + playerObj.player);
+//     console.log(playerNamber);
+//     return playerNamber;
+// };
+
+
+
+// function renderHp(player) {
+//     const playerLife = document.querySelector('.player' + player.player + ' .life');
+//     playerLife.style.width = player.hp + '%';
+//     console.log(playerLife);
+//     return playerLife;
+// };
+
+function deductHP(dem) {
+
+    return this.hp -= dem;
+
+};
+function drowHP() {
+    const playerLife = document.querySelector('.player' + this.player + ' .life');
+    return playerLife.style.width = this.hp + '%';
 }
 
 button.addEventListener('click', function () {
     console.log('kickasss!!!');
     changeHP(scorpion);
     changeHP(subZero);
+
+    if (scorpion.hp == 0 || subZero.hp == 0) {
+        button.disabled = true;
+    }
+
+    if (scorpion.hp === 0 && scorpion.hp < subZero.hp) {
+        arenas.appendChild(playerWins(subZero.name));
+    } else if (subZero.hp === 0 && subZero.hp < scorpion.hp) {
+        arenas.appendChild(playerWins(scorpion.name));
+    }
+    // console.log(scorpion.name, subZero.name, scorpion.hp, subZero.hp);
+    // renderHp(scorpion);
+    // renderHp(subZero);
+    console.log(scorpion.deductHP(randomDamage(20)));
+    console.log(subZero.deductHP(randomDamage(20)));
+    console.log(scorpion.drowHP());
+    console.log(subZero.drowHP());
 });
 
 arenas.appendChild(createPlayer(scorpion));
