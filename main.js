@@ -1,5 +1,6 @@
 const arenas = document.querySelector('.arenas');
-const button = document.querySelector('.button');
+// const button = document.querySelector('.button');
+const formFight = document.querySelector('.control');
 
 const scorpion = {
     player: 1,
@@ -10,8 +11,9 @@ const scorpion = {
     attack: function () {
         console.log(this.name + 'fight...');
     },
-    deductHP: deductHP,
-    drowHP: drowHP,
+    deductHP,
+    drowHP,
+    changeHP,
 };
 
 const subZero = {
@@ -23,15 +25,24 @@ const subZero = {
     attack: function () {
         console.log(this.name + '  ' + ' fight...');
     },
-    deductHP: deductHP,
-    drowHP: drowHP,
+    deductHP,
+    drowHP,
+    changeHP,
 };
+
+const HIT = {
+    head: 30,
+    body: 25,
+    foot: 20,
+};
+
+const ATTACK = ['head', 'body', 'foot'];
 
 function createElement(tag, className) {
     const OurTag = document.createElement(tag);
     OurTag.classList.add(className);
     return OurTag;
-}
+};
 
 function createPlayer(playerObj) {
 
@@ -57,17 +68,6 @@ function createPlayer(playerObj) {
     player.appendChild(character);
 
     return player;
-}
-
-function changeHP(player) {
-    // const playerLife = document.querySelector('.player' + player.player + ' .life');
-    // player.hp -= randomDamage(20);
-
-    if (player.hp < 0) {
-        player.hp = 0;
-    }
-
-    // playerLife.style.width = player.hp + '%';
 };
 
 function playerWins(name) {
@@ -84,6 +84,17 @@ function randomDamage(nam) {
     const damage = Math.ceil(Math.random() * nam);
     // console.log(damage);
     return damage;
+};
+
+function changeHP(player) {
+    // const playerLife = document.querySelector('.player' + player.player + ' .life');
+    // player.hp -= randomDamage(20);
+
+    if (player.hp <= 0) {
+        player.hp = 0;
+    }
+
+    // playerLife.style.width = player.hp + '%';
 };
 
 // function elHP(playerObj) {
@@ -106,33 +117,51 @@ function deductHP(dem) {
     return this.hp -= dem;
 
 };
+
 function drowHP() {
     const playerLife = document.querySelector('.player' + this.player + ' .life');
     return playerLife.style.width = this.hp + '%';
-}
+};
 
-button.addEventListener('click', function () {
-    console.log('kickasss!!!');
-    changeHP(scorpion);
-    changeHP(subZero);
+function createReloadButton() {
+    const reload = createElement('div', 'reloadWrap');
+    const reloadButton = createElement('button', 'button');
+    reloadButton.innerText = '*RESTART*'
+    reload.appendChild(reloadButton);
+    arenas.appendChild(reload);
 
-    if (scorpion.hp == 0 || subZero.hp == 0) {
-        button.disabled = true;
-    }
+    reloadButton.addEventListener('click', function () {
+        window.location.reload();
+    });
+};
 
-    if (scorpion.hp === 0 && scorpion.hp < subZero.hp) {
-        arenas.appendChild(playerWins(subZero.name));
-    } else if (subZero.hp === 0 && subZero.hp < scorpion.hp) {
-        arenas.appendChild(playerWins(scorpion.name));
-    }
-    // console.log(scorpion.name, subZero.name, scorpion.hp, subZero.hp);
-    // renderHp(scorpion);
-    // renderHp(subZero);
-    console.log(scorpion.deductHP(randomDamage(20)));
-    console.log(subZero.deductHP(randomDamage(20)));
-    console.log(scorpion.drowHP());
-    console.log(subZero.drowHP());
+formFight.addEventListener('submit', function (e) {
+    e.preventDefault();
+    console.dir(formFight);
 });
+
+// button.addEventListener('click', function () {
+//     console.log('kickasss!!!');
+//     changeHP(scorpion);
+//     changeHP(subZero);
+
+//     if (scorpion.hp === 0 || subZero.hp === 0) {
+//         button.disabled = true;
+//         createReloadButton();
+//     }
+
+//     if (scorpion.hp === 0 && scorpion.hp < subZero.hp) {
+//         arenas.appendChild(playerWins(subZero.name));
+//     } else if (subZero.hp === 0 && subZero.hp < scorpion.hp) {
+//         arenas.appendChild(playerWins(scorpion.name));
+//     } else if (scorpion.hp === 0 && subZero.hp === 0) {
+//         arenas.appendChild(playerWins());
+//     }
+// console.log(scorpion.deductHP(randomDamage(20)));
+// console.log(subZero.deductHP(randomDamage(20)));
+// console.log(scorpion.drowHP());
+// console.log(subZero.drowHP());
+// });
 
 arenas.appendChild(createPlayer(scorpion));
 arenas.appendChild(createPlayer(subZero));
