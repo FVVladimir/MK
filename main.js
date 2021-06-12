@@ -11,9 +11,9 @@ const scorpion = {
     attack: function () {
         console.log(this.name + 'fight...');
     },
-    deductHP,
-    drowHP,
     changeHP,
+    elHP,
+    renderHp,
 };
 
 const subZero = {
@@ -25,9 +25,9 @@ const subZero = {
     attack: function () {
         console.log(this.name + '  ' + ' fight...');
     },
-    deductHP,
-    drowHP,
     changeHP,
+    elHP,
+    renderHp,
 };
 
 const HIT = {
@@ -86,42 +86,36 @@ function randomDamage(nam) {
     return damage;
 };
 
-function changeHP(player) {
-    // const playerLife = document.querySelector('.player' + player.player + ' .life');
-    // player.hp -= randomDamage(20);
+function changeHP(dam) {
 
-    if (player.hp <= 0) {
-        player.hp = 0;
-    }
+    this.player.hp -= dam;
 
-    // playerLife.style.width = player.hp + '%';
-};
+    if (this.player.hp <= 0) {
 
-// function elHP(playerObj) {
-//     const playerNamber = document.querySelector('.player' + playerObj.player);
-//     console.log(playerNamber);
-//     return playerNamber;
-// };
+        this.player.hp = 0;
+    };
 
-
-
-// function renderHp(player) {
-//     const playerLife = document.querySelector('.player' + player.player + ' .life');
-//     playerLife.style.width = player.hp + '%';
-//     console.log(playerLife);
-//     return playerLife;
-// };
-
-function deductHP(dem) {
-
-    return this.hp -= dem;
+    console.log(scorpion.changeHP(randomDamage(20)));
 
 };
 
-function drowHP() {
+function elHP() {
+
+    const playerNamber = document.querySelector('.player' + this.player);
+
+    console.log(playerNamber);
+    return playerNamber;
+};
+
+
+
+function renderHp(player) {
     const playerLife = document.querySelector('.player' + this.player + ' .life');
-    return playerLife.style.width = this.hp + '%';
+    playerLife.style.width = this.player.hp + '%';
+    console.log(playerLife);
+    return playerLife;
 };
+
 
 function createReloadButton() {
     const reload = createElement('div', 'reloadWrap');
@@ -137,8 +131,41 @@ function createReloadButton() {
 
 formFight.addEventListener('submit', function (e) {
     e.preventDefault();
-    console.dir(formFight);
+    const enemy = enemyAttack();
+    const attack = {};
+
+    for (let item of formFight) {
+
+        if (item.checked && item.name === 'hit') {
+            attack.value = randomDamage(HIT[item.value]);
+            attack.hit = item.value;
+        }
+
+        if (item.checked && item.name === 'defence') {
+            attack.defence = item.value;
+        }
+
+        item.checked = false;
+    }
+    console.log(scorpion.hp - attack.value);
+    console.log('our attack', attack);
+    console.log('computer attack', enemy);
+
 });
+
+
+function enemyAttack() {
+    const hit = ATTACK[randomDamage(3) - 1];
+    const defence = ATTACK[randomDamage(3) - 1];
+    console.log(hit, defence);
+    changeHP(scorpion);
+    changeHP(subZero);
+    return {
+        value: randomDamage(HIT[hit]),
+        hit,
+        defence,
+    }
+}
 
 // button.addEventListener('click', function () {
 //     console.log('kickasss!!!');
