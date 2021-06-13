@@ -88,34 +88,23 @@ function randomDamage(nam) {
 
 function changeHP(dam) {
 
-    this.player.hp -= dam;
+    this.hp -= dam;
 
-    if (this.player.hp <= 0) {
+    if (this.hp <= 0) {
 
-        this.player.hp = 0;
+        this.hp = 0;
     };
-
-    console.log(scorpion.changeHP(randomDamage(20)));
 
 };
 
 function elHP() {
-
-    const playerNamber = document.querySelector('.player' + this.player);
-
-    console.log(playerNamber);
+    const playerNamber = document.querySelector('.player' + this.player + ' .life');
     return playerNamber;
 };
 
-
-
-function renderHp(player) {
-    const playerLife = document.querySelector('.player' + this.player + ' .life');
-    playerLife.style.width = this.player.hp + '%';
-    console.log(playerLife);
-    return playerLife;
+function renderHp() {
+    this.elHP().style.width = this.hp + '%';
 };
-
 
 function createReloadButton() {
     const reload = createElement('div', 'reloadWrap');
@@ -129,9 +118,8 @@ function createReloadButton() {
     });
 };
 
-formFight.addEventListener('submit', function (e) {
-    e.preventDefault();
-    const enemy = enemyAttack();
+function playerAttack() {
+
     const attack = {};
 
     for (let item of formFight) {
@@ -147,25 +135,64 @@ formFight.addEventListener('submit', function (e) {
 
         item.checked = false;
     }
-    console.log(scorpion.hp - attack.value);
-    console.log('our attack', attack);
-    console.log('computer attack', enemy);
 
-});
+    return attack;
+};
+
+function showResult() {
+
+    if (scorpion.hp === 0 || subZero.hp === 0) {
+        button.disabled = true;
+        createReloadButton();
+    }
+
+    if (scorpion.hp === 0 && scorpion.hp < subZero.hp) {
+        arenas.appendChild(playerWins(subZero.name));
+    } else if (subZero.hp === 0 && subZero.hp < scorpion.hp) {
+        arenas.appendChild(playerWins(scorpion.name));
+    } else if (scorpion.hp === 0 && subZero.hp === 0) {
+        arenas.appendChild(playerWins());
+    }
+
+}
 
 
 function enemyAttack() {
     const hit = ATTACK[randomDamage(3) - 1];
     const defence = ATTACK[randomDamage(3) - 1];
-    console.log(hit, defence);
-    changeHP(scorpion);
-    changeHP(subZero);
+
+    scorpion.changeHP(randomDamage(20));
+    subZero.changeHP(randomDamage(20));
+    scorpion.renderHp();
+    subZero.renderHp();
     return {
         value: randomDamage(HIT[hit]),
         hit,
         defence,
     }
-}
+};
+
+formFight.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const enemy = enemyAttack();
+    const player = playerAttack();
+
+    if (player.defence !== enemy.hit) {
+        scorpion.changeHP(enemy.value);
+        scorpion.renderHp();
+    };
+
+    if (enemy.defence !== player.hit) {
+        subZero.changeHP(player.value);
+        subZero.renderHp();
+    };
+
+    showResult();
+
+    console.log('our attack', player);
+    console.log('computer attack', enemy);
+
+});
 
 // button.addEventListener('click', function () {
 //     console.log('kickasss!!!');
